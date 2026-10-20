@@ -187,11 +187,11 @@ a=exactBase(s);p=percent(s.level);up=Math.random()<.5;
 out=rnd2(a*(up?100+p:100-p)/100);
 return {id,prompt:"Число "+number(a)+" "+(up?"увеличили":"уменьшили")+" на "+p+"%. Каким оно стало?",value:out,unit:"",steps:["Коэффициент изменения: "+(up?"1 + ":"1 − ")+p+"/100 = "+number((up?100+p:100-p)/100)+".","Новое число: "+number(a)+" × "+number((up?100+p:100-p)/100)+" = "+number(out)+"."]};
 case 5:
-a=exactBase(s);p=percent(s.level);q=percent(s.level);up=Math.random()<.5;up2=Math.random()<.5;
+a=exactBase(s);p=percent(s.level);q=percent(s.level);if(s.level==="hard"&&s.max===99){a=10*r(1,9);q=10*r(1,8)}up=Math.random()<.5;up2=Math.random()<.5;
 first=rnd2(a*(up?100+p:100-p)/100);second=rnd2(first*(up2?100+q:100-q)/100);
 return {id,prompt:"Число "+number(a)+" сначала "+(up?"увеличили":"уменьшили")+" на "+p+"%, а затем "+(up2?"увеличили":"уменьшили")+" на "+q+"%. Какой результат?",value:second,unit:"",steps:["После первого изменения: "+number(a)+" × "+number((up?100+p:100-p)/100)+" = "+number(first)+".","После второго: "+number(first)+" × "+number((up2?100+q:100-q)/100)+" = "+number(second)+".","Важно: второй процент считается от уже изменённого числа."]};
 case 6:
-a=exactBase(s);p=percent(s.level);q=percent(s.level);up=Math.random()<.5;up2=Math.random()<.5;
+a=exactBase(s);p=percent(s.level);q=percent(s.level);if(s.level==="hard"&&s.max===99){a=10*r(1,9);q=10*r(1,8)}up=Math.random()<.5;up2=Math.random()<.5;
 first=rnd2(a*(up?100+p:100-p)/100);second=rnd2(first*(up2?100+q:100-q)/100);
 return {id,prompt:"Число "+number(a)+" сначала "+(up?"увеличили":"уменьшили")+" на "+p+"%, а затем "+(up2?"увеличили":"уменьшили")+" на x%. Получилось "+number(second)+". Найди x.",value:q,unit:"%",steps:["Найди промежуточное значение: "+number(a)+" × "+number((up?100+p:100-p)/100)+" = "+number(first)+".","Доля изменения = |"+number(second)+" − "+number(first)+"| / "+number(first)+".","x = |"+number(second)+" − "+number(first)+"| / "+number(first)+" × 100 = "+number(q)+"%."]};
 case 7:
