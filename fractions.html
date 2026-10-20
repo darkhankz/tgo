@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b111c">
+<title>Дроби — тренажёр | TGO TRACK</title>
+<style>
+:root{color-scheme:dark;--bg:#0b111c;--card:#152133;--line:#2d4155;--text:#eaf1f9;--mute:#9aadc0;--green:#c7fd7b;--bad:#ff9e96;--blue:#9bbdff;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 80% -5%,#243d4c 0,transparent 52%),var(--bg);color:var(--text);min-height:100vh}
+a{color:var(--green)}a:hover{opacity:.9}
+.container{max-width:1120px;padding:0 20px;margin:auto}
+header{background:#101824ee;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:9}
+nav{height:66px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.logo{font-size:15px;font-weight:900;letter-spacing:1.4px;text-decoration:none;color:var(--text)}
+.logo strong{color:var(--green)}
+.back{font-size:13px;color:var(--mute);text-decoration:none}
+.hero{padding:40px 0 22px}
+.kicker{letter-spacing:2px;color:var(--green);font-size:12px;font-weight:800;text-transform:uppercase}
+h1{letter-spacing:-.055em;font-size:clamp(34px,6vw,54px);line-height:1.1;margin:14px 0}
+.sub{line-height:1.65;color:var(--mute);max-width:720px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 25px}
+.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:18px}
+.stat{padding:17px 20px}
+.stat strong{display:block;font-size:27px;font-variant-numeric:tabular-nums}
+.stat small{color:var(--mute)}
+.main{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;padding-bottom:60px}
+.panel{padding:22px}
+.panel h2{font-size:19px;margin:0 0 20px}
+.field{margin:20px 0}
+.field h3{font-size:14px;margin:0 0 10px;color:var(--text)}
+.hint{font-size:12px;color:var(--mute);line-height:1.5;margin:10px 0}
+.choices{display:grid;gap:8px}
+.choices.split{grid-template-columns:repeat(3,minmax(0,1fr))}
+.choices label,.ops label{border:1px solid var(--line);border-radius:12px;cursor:pointer;background:#101b2b;padding:10px;display:flex;align-items:center;justify-content:center;min-height:43px;gap:7px;font-weight:650;font-size:13px}
+input[type=radio],input[type=checkbox]{accent-color:#c7fd7b}
+.choices label:has(input:checked),.ops label:has(input:checked){background:#253b38;border-color:#94c76d}
+.ops{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ops label{font-size:22px}
+input[type=number],input[type=text]{border-radius:12px;border:1px solid #43576b;background:#0e1927;color:var(--text);padding:12px;min-width:0;outline:none}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+input[type=number]{width:105px;font-weight:800}
+.checkrow{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#cbdae8;line-height:1.5;margin:12px 0}
+.btn{background:var(--green);border:1px solid var(--green);color:#132015;border-radius:12px;padding:12px 18px;font-size:14px;font-weight:850;cursor:pointer;transition:transform .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn.secondary{background:#293c4e;border-color:#3e536a;color:var(--text)}
+.btn.ghost{background:transparent;border-color:#42566e;color:#c7d8e7}
+.btn:disabled{cursor:not-allowed;opacity:.5;transform:none}
+.btn.full{width:100%;margin-top:10px}
+.questionPanel{display:flex;flex-direction:column;min-height:510px}
+.topline{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.pill{font-size:12px;border:1px solid #46704c;color:#b9f7ac;background:#223429;padding:6px 10px;border-radius:999px}
+.questionPrompt{font-size:14px;color:var(--mute);margin:22px 0 10px}
+.math{display:flex;align-items:center;justify-content:center;gap:clamp(13px,3vw,30px);min-height:145px;font-size:clamp(25px,5vw,42px);font-weight:800;font-variant-numeric:tabular-nums}
+.frac{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;min-width:1.25em;vertical-align:middle}
+.frac span{padding:5px 7px;text-align:center}
+.frac span:first-child{border-bottom:2px solid currentColor;width:100%}
+.symbol{color:var(--green)}
+.answerLabel{font-size:13px;color:var(--mute);margin:8px 0}
+.answerline{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.entryfrac{display:inline-flex;flex-direction:column;gap:5px;width:105px}
+.entryfrac input{width:100%;font-size:23px;text-align:center;padding:9px;font-weight:800}
+.entrybar{height:3px;border-radius:2px;background:#c2d3e3;width:100%}
+.answerTip{color:var(--mute);font-size:12px}
+.buttons{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 10px}
+.message{min-height:45px;font-size:14px;line-height:1.5;margin:10px 0;color:#bcd0e0}
+.message.good{color:var(--green)}.message.bad{color:var(--bad)}
+.solution{background:#0d1927;border:1px solid #38516c;border-radius:15px;padding:16px;margin-top:13px}
+.solution h3{font-size:14px;margin:0 0 12px}
+.solution p{line-height:1.7;color:#d7e5f3}
+.solution strong{color:var(--green)}
+.footerNote{font-size:13px;color:var(--mute);line-height:1.6;margin:16px 0 0}
+footer{border-top:1px solid var(--line);padding:20px 0 28px;color:var(--mute);font-size:12px}
+@media(max-width:800px){.main{grid-template-columns:1fr}.stats{gap:8px}.panel{padding:17px}.stat{padding:12px}.stat strong{font-size:24px}.questionPanel{min-height:auto}.hero{padding-top:26px}.back{font-size:12px}}
+@media(max-width:420px){.choices.split{grid-template-columns:1fr}.math{gap:14px}.buttons .btn{flex:1;min-width:110px}}
+</style>
+</head>
+<body>
+<header><div class="container"><nav><a class="logo" href="./index.html">↗ TGO <strong>TRACK</strong></a><a class="back" href="./index.html">← Вернуться к роадмапу</a></nav></div></header>
+<div class="container">
+<section class="hero">
+<div class="kicker">КТ · критическое мышление · практика</div>
+<h1>Тренажёр дробей</h1>
+<p class="sub">Генерируй задачи, выбирай правильные или неправильные дроби и тренируй сложение, вычитание, умножение и деление. Числитель и знаменатель каждого исходного примера — не более двух цифр.</p>
+</section>
+<section class="stats" aria-label="Статистика тренировки">
+<div class="stat"><strong id="correctCount">0</strong><small>верных ответов</small></div>
+<div class="stat"><strong id="wrongCount">0</strong><small>ошибок</small></div>
+<div class="stat"><strong id="streakCount">0</strong><small>серия подряд</small></div>
+</section>
+<div class="main">
+<aside class="panel">
+<h2>Настройки тренировки</h2>
+<div class="field"><h3>Вид дробей</h3>
+<div class="choices split">
+<label><input type="radio" name="fractionType" value="proper"> Правильные</label>
+<label><input type="radio" name="fractionType" value="improper"> Неправильные</label>
+<label><input type="radio" name="fractionType" value="both" checked> Оба вида</label>
+</div>
+<p class="hint">Правильная: числитель меньше знаменателя. Неправильная: числитель больше либо равен знаменателю.</p>
+</div>
+<div class="field"><h3>Операции</h3>
+<div class="ops">
+<label title="Сложение"><input type="checkbox" name="op" value="+" checked>+</label>
+<label title="Вычитание"><input type="checkbox" name="op" value="-" checked>−</label>
+<label title="Умножение"><input type="checkbox" name="op" value="*" checked>×</label>
+<label title="Деление"><input type="checkbox" name="op" value="/" checked>÷</label>
+</div>
+</div>
+<div class="field"><h3><label for="limit">Максимальное число</label></h3>
+<input id="limit" type="number" min="2" max="99" value="20" step="1" inputmode="numeric">
+<p class="hint">Числители и знаменатели от 1 до выбранного значения (не больше 99).</p>
+</div>
+<label class="checkrow"><input type="checkbox" id="positiveOnly" checked> Не генерировать отрицательный результат при вычитании</label>
+<label class="checkrow"><input type="checkbox" id="simplifyRequired"> Требовать сокращённый ответ</label>
+<div id="settingsError" class="message bad" aria-live="polite"></div>
+<button id="generate" class="btn full" type="button">↻ Новая задача</button>
+<p class="footerNote">Настройки применятся при создании следующей задачи. Результаты тренировки сохраняются в этом браузере.</p>
+</aside>
+<main class="panel questionPanel">
+<div class="topline"><h2 style="margin:0">Реши пример</h2><span class="pill" id="taskLabel">Случайная задача</span></div>
+<p class="questionPrompt">Введи результат в виде дроби. Если получилось целое число, укажи знаменатель 1.</p>
+<div class="math" id="question" aria-label="Пример с дробями"></div>
+<form id="answerForm" autocomplete="off">
+<div class="answerLabel">Твой ответ</div>
+<div class="answerline">
+<div class="entryfrac"><input id="answerNum" aria-label="Числитель ответа" type="text" inputmode="numeric" placeholder="?" required maxlength="9"><div class="entrybar"></div><input id="answerDen" aria-label="Знаменатель ответа" type="text" inputmode="numeric" placeholder="?" required maxlength="9"></div>
+<span class="answerTip">Можно вводить равную по значению дробь.<br>Например, 2/4 = 1/2.</span>
+</div>
+<div class="buttons">
+<button class="btn" id="check" type="submit">Проверить</button>
+<button class="btn secondary" id="show" type="button">Показать решение</button>
+<button class="btn ghost" id="next" type="button">Следующий →</button>
+</div>
+</form>
+<div class="message" id="feedback" aria-live="polite">Решение скрыто, пока ты не проверишь ответ.</div>
+<div class="solution" id="solution" hidden>
+<h3>Разбор задачи</h3>
+<div id="solutionText"></div>
+</div>
+</main>
+</div>
+</div>
+<footer><div class="container">TGO TRACK · Математическая практика для критического мышления КТ · <a href="./index.html">30-дневный роадмап</a></div></footer>
+<script>
+(function(){
+"use strict";
+var storeKey="tgo-fractions-v1";
+var $=function(id){return document.getElementById(id)};
+var stats={correct:0,wrong:0,streak:0};
+try { var saved=JSON.parse(localStorage.getItem(storeKey)||"null"); if(saved && typeof saved==="object"){stats.correct=Math.max(0,Number(saved.correct)||0);stats.wrong=Math.max(0,Number(saved.wrong)||0);stats.streak=Math.max(0,Number(saved.streak)||0);} } catch(e){}
+var task=null,solved=false,revealed=false;
+function save(){try{localStorage.setItem(storeKey,JSON.stringify(stats))}catch(e){}}
+function paintStats(){$("correctCount").textContent=stats.correct;$("wrongCount").textContent=stats.wrong;$("streakCount").textContent=stats.streak;}
+function rand(lo,hi){return lo+Math.floor(Math.random()*(hi-lo+1))}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b!==0){var r=a%b;a=b;b=r}return a||1}
+function reduce(n,d){if(d<0){n=-n;d=-d}var g=gcd(n,d);return {n:n/g,d:d/g}}
+function fraction(kind,max){
+if(kind==="both")kind=Math.random()<.5?"proper":"improper";
+if(kind==="proper"){var d=rand(2,max);return {n:rand(1,d-1),d:d}}
+var den=rand(1,max),num=rand(den,max);
+return {n:num,d:den};
+}
+function symbol(op){return {"*":"×","/":"÷","-":"−","+":"+"}[op]}
+function fracHtml(a){return '<span class="frac"><span>'+a.n+'</span><span>'+a.d+'</span></span>'}
+function operation(a,b,op){
+var n,d;
+if(op==="+"){n=a.n*b.d+b.n*a.d;d=a.d*b.d}
+else if(op==="-"){n=a.n*b.d-b.n*a.d;d=a.d*b.d}
+else if(op==="*"){n=a.n*b.n;d=a.d*b.d}
+else {n=a.n*b.d;d=a.d*b.n}
+return {rawN:n,rawD:d,answer:reduce(n,d)}
+}
+function readOptions(){
+var ops=Array.from(document.querySelectorAll('input[name="op"]:checked')).map(function(x){return x.value});
+var kind=document.querySelector('input[name="fractionType"]:checked').value;
+var max=Math.trunc(Number($("limit").value));
+if(!Number.isFinite(max)||max<2||max>99){$("settingsError").textContent="Укажи целое число от 2 до 99.";return null}
+if(!ops.length){$("settingsError").textContent="Выбери хотя бы одну операцию.";return null}
+$("settingsError").textContent="";
+return {kind:kind,max:max,ops:ops}
+}
+function newTask(){
+var opts=readOptions();if(!opts)return;
+var op=opts.ops[rand(0,opts.ops.length-1)];
+var a=fraction(opts.kind,opts.max),b=fraction(opts.kind,opts.max);
+if(op==="-" && $("positiveOnly").checked && a.n*b.d<b.n*a.d){var swap=a;a=b;b=swap}
+var result=operation(a,b,op);
+task={a:a,b:b,op:op,rawN:result.rawN,rawD:result.rawD,answer:result.answer};
+solved=false;revealed=false;
+$("question").innerHTML=fracHtml(a)+'<span class="symbol">'+symbol(op)+'</span>'+fracHtml(b)+'<span class="symbol">= ?</span>';
+$("taskLabel").textContent={"+":"Сложение","-":"Вычитание","*":"Умножение","/":"Деление"}[op];
+$("answerNum").value="";$("answerDen").value="";
+$("check").disabled=false;$("show").disabled=false;$("solution").hidden=true;
+$("feedback").className="message";$("feedback").textContent="Введи ответ, затем нажми «Проверить».";
+$("answerNum").focus();
+}
+function explain(){
+if(!task)return;
+var a=task.a,b=task.b,op=task.op;
+var expression=a.n+"/"+a.d+" "+symbol(op)+" "+b.n+"/"+b.d;
+var middle="";
+if(op==="+")middle="("+a.n+" × "+b.d+" + "+b.n+" × "+a.d+") / ("+a.d+" × "+b.d+")";
+if(op==="-")middle="("+a.n+" × "+b.d+" − "+b.n+" × "+a.d+") / ("+a.d+" × "+b.d+")";
+if(op==="*")middle="("+a.n+" × "+b.n+") / ("+a.d+" × "+b.d+")";
+if(op==="/")middle="("+a.n+" × "+b.d+") / ("+a.d+" × "+b.n+"), потому что делим на дробь — умножаем на обратную";
+var raw=task.rawN+"/"+task.rawD;
+var answer=task.answer.n+"/"+task.answer.d;
+var p=document.createElement("p");
+p.textContent=expression+" = "+middle+" = "+raw;
+var p2=document.createElement("p");
+p2.textContent="После сокращения: "+answer+(task.answer.d===1?" (целое число).":".");
+$("solutionText").replaceChildren(p,p2);
+$("solution").hidden=false;
+}
+function feedback(msg,good){$("feedback").textContent=msg;$("feedback").className="message "+(good?"good":"bad")}
+function checkAnswer(event){
+event.preventDefault();if(!task||solved||revealed)return;
+var ns=$("answerNum").value.trim(),ds=$("answerDen").value.trim();
+if(!/^-?\d+$/.test(ns)||!/^-?\d+$/.test(ds)){feedback("Введи целые числа в числитель и знаменатель.",false);return}
+var n=Number(ns),d=Number(ds);
+if(!Number.isSafeInteger(n)||!Number.isSafeInteger(d)||d===0){feedback("Числа должны быть целыми, а знаменатель — не ноль.",false);return}
+var user=reduce(n,d);
+var correct=user.n===task.answer.n&&user.d===task.answer.d;
+var simplified=gcd(n,d)===1&&d>0;
+if(correct && $("simplifyRequired").checked && !simplified){feedback("По значению верно! Но нужно сократить дробь до несократимой.",false);return}
+if(correct){
+solved=true;stats.correct++;stats.streak++;save();paintStats();feedback("Правильно! Отличная работа. Нажми «Следующий» или посмотри разбор.",true);$("check").disabled=true;explain();
+}else{
+stats.wrong++;stats.streak=0;save();paintStats();feedback("Пока неверно. Попробуй ещё раз или открой решение.",false);
+}
+}
+$("answerForm").addEventListener("submit",checkAnswer);
+$("generate").addEventListener("click",newTask);
+$("next").addEventListener("click",newTask);
+$("show").addEventListener("click",function(){explain();revealed=true;$("check").disabled=true;$("show").disabled=true;if(!solved)feedback("Решение открыто. Следующая задача — новая попытка.",false);});
+$("limit").addEventListener("change",function(){var v=Math.trunc(Number(this.value));this.value=Number.isFinite(v)?Math.max(2,Math.min(99,v)):20});
+paintStats();newTask();
+})();
+</script>
+</body>
+</html>
