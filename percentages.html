@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b111c">
+<meta name="description" content="Интерактивный тренажёр процентов TGO TRACK для подготовки к критическому мышлению КТ.">
+<title>Проценты — тренажёр | TGO TRACK</title>
+<style>
+:root{color-scheme:dark;--bg:#0b111c;--card:#152133;--line:#2b3c50;--text:#edf4fa;--muted:#9bacc0;--accent:#c7fd7b;--danger:#ffa69e;--blue:#a9cbfc;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 80% -10%,#254450 0%,transparent 45%),var(--bg);color:var(--text);min-height:100vh}
+a{color:var(--accent)}a:hover{opacity:.9}button,input{font:inherit}
+.container{max-width:1150px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:5;background:#101824e8;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav{height:64px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{letter-spacing:1.5px;font-size:15px;font-weight:900;text-decoration:none;color:var(--text)}.logo b{color:var(--accent)}
+.back{font-size:13px;text-decoration:none;color:var(--muted)}
+.hero{padding:42px 0 20px}.kicker{font-size:12px;letter-spacing:2px;font-weight:800;color:var(--accent)}
+h1{letter-spacing:-.05em;font-size:clamp(35px,6vw,56px);margin:12px 0;line-height:1.08}
+h2{font-size:19px;margin:0 0 18px}h3{font-size:15px;margin:0 0 10px}.sub{font-size:15px;color:var(--muted);max-width:750px;line-height:1.6}
+.panel,.stat{background:var(--card);border:1px solid var(--line);border-radius:18px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 22px}
+.stat{padding:18px 20px}.stat strong{font-size:30px;display:block;font-variant-numeric:tabular-nums}.stat small,.muted{color:var(--muted);font-size:12px}
+.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;padding-bottom:45px}
+.panel{padding:22px}.field{margin:22px 0}.field:first-of-type{margin-top:0}
+.choose{display:grid;gap:9px}.choose label,.difficulty label{cursor:pointer;display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:#101b2b;padding:11px 12px;border-radius:10px;font-size:13px;line-height:1.3}
+.choose label:has(input:checked),.difficulty label:has(input:checked){border-color:#71945e;background:#23382d}
+input[type=checkbox],input[type=radio]{accent-color:var(--accent);height:16px;width:16px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.btn{cursor:pointer;border-radius:11px;border:1px solid var(--accent);background:var(--accent);color:#14211b;font-size:14px;font-weight:800;padding:12px 15px}
+.btn:hover{filter:brightness(1.05)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.subtle{background:#283b4e;color:var(--text);border-color:#486076}.btn.outline{background:transparent;color:#dce9f3;border-color:#50637b}
+.btn.mini{font-size:12px;padding:8px 10px}.btn.wide{width:100%}
+.difficulty{display:grid;gap:8px}
+.example{font-size:13px;color:var(--muted);line-height:1.5}
+.session{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.pill{display:inline-block;border-radius:999px;padding:6px 10px;border:1px solid #426349;background:#1f3229;color:#c7fdaf;font-size:12px}
+.question{font-size:clamp(20px,3vw,28px);font-weight:760;line-height:1.5;min-height:175px;margin:25px 0 16px;display:flex;align-items:center;letter-spacing:-.02em}
+.answerRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.answerRow input{background:#0d1927;border:1px solid #506379;border-radius:10px;color:var(--text);font-size:21px;font-weight:700;width:180px;max-width:100%;padding:12px}
+#answerUnit{font-size:18px;font-weight:750;color:var(--accent)}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.message{min-height:41px;color:var(--muted);font-size:14px;line-height:1.5;margin:12px 0}
+.message.success{color:var(--accent)}.message.fail{color:var(--danger)}
+.solution{border:1px solid #3e566b;background:#0c1927;border-radius:14px;padding:17px;margin-top:15px}
+.solution ol{padding-left:21px;line-height:1.6;color:#d8e5f0;font-size:14px}
+.solution li{margin:8px 0}
+.solution p{font-size:16px;color:var(--accent);font-weight:750}
+.sideNote{line-height:1.6;font-size:12px;color:var(--muted)}
+.breakdown{margin-top:18px;padding-top:15px;border-top:1px solid var(--line)}
+.breakdownrow{display:grid;grid-template-columns:minmax(0,1fr) 92px 40px;gap:10px;align-items:center;font-size:12px;color:#c6d8e5;margin:10px 0}
+.track{background:#34485d;height:7px;border-radius:10px;overflow:hidden}.track span{display:block;height:100%;background:var(--accent);border-radius:10px}
+.note{font-size:12px;color:var(--muted);margin-top:15px;line-height:1.6}
+footer{border-top:1px solid var(--line);color:var(--muted);padding:24px 0 35px;font-size:12px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.hero{padding-top:24px}.panel{padding:17px}.stat{padding:13px}.stat strong{font-size:24px}.question{min-height:110px}.back{font-size:12px}}
+@media(max-width:460px){.stats{gap:7px}.stat{padding:10px}.stat strong{font-size:22px}.toolbar .btn{flex:1;min-width:120px}.answerRow input{max-width:200px}}
+</style>
+</head>
+<body>
+<header><div class="container"><nav><a href="./index.html" class="logo">↗ TGO <b>TRACK</b></a><a class="back" href="./index.html">← К роадмапу</a></nav></div></header>
+<div class="container">
+<section class="hero">
+<div class="kicker">Критическое мышление · самостоятельная практика</div>
+<h1>Тренажёр процентов</h1>
+<p class="sub">8 типов задач от простых процентов до смесей и последовательных изменений. Выбирай темы и сложность, решай случайные примеры и разбирай каждую ошибку.</p>
+</section>
+<div class="stats">
+<div class="stat"><strong id="correctTotal">0</strong><small>верных попыток</small></div>
+<div class="stat"><strong id="wrongTotal">0</strong><small>ошибок</small></div>
+<div class="stat"><strong id="streakTotal">0</strong><small>серия ответов</small></div>
+</div>
+<div class="layout">
+<aside class="panel">
+<h2>Настройки</h2>
+<div class="field">
+<h3>Выбери типы задач</h3>
+<div class="quick">
+<button type="button" class="btn mini subtle" id="selectAll">Все задачи</button>
+<button type="button" class="btn mini subtle" id="selectBase">База (1–4)</button>
+<button type="button" class="btn mini outline" id="selectHard">Сложные (5–8)</button>
+</div>
+<div id="categories" class="choose">
+<label><input type="checkbox" value="1" class="category" checked> 1. Процент от числа</label>
+<label><input type="checkbox" value="2" class="category" checked> 2. Найти исходное число</label>
+<label><input type="checkbox" value="3" class="category" checked> 3. Какой процент составляет число?</label>
+<label><input type="checkbox" value="4" class="category" checked> 4. Увеличение и уменьшение</label>
+<label><input type="checkbox" value="5" class="category"> 5. Последовательные изменения</label>
+<label><input type="checkbox" value="6" class="category"> 6. Найти неизвестный процент</label>
+<label><input type="checkbox" value="7" class="category"> 7. Процентная разница</label>
+<label><input type="checkbox" value="8" class="category"> 8. Смеси и концентрации</label>
+</div>
+</div>
+<div class="field">
+<h3>Сложность</h3>
+<div class="difficulty">
+<label><input type="radio" name="difficulty" value="easy" checked> Лёгкий — удобные числа</label>
+<label><input type="radio" name="difficulty" value="medium"> Средний — больше значений</label>
+<label><input type="radio" name="difficulty" value="hard"> Сложный — уровень КТ</label>
+</div>
+</div>
+<div class="field">
+<h3>Размер чисел</h3>
+<div class="difficulty">
+<label><input type="radio" name="maxnumber" value="99"> До 99</label>
+<label><input type="radio" name="maxnumber" value="999"> До 999</label>
+<label><input type="radio" name="maxnumber" value="9999" checked> До 9999</label>
+</div>
+<p class="sideNote">Для некоторых комбинаций тема требует чисел от 100. Если выбран предел 99, генератор подберёт подходящие значения в этом диапазоне.</p>
+</div>
+<div class="message fail" id="settingsFeedback" aria-live="polite"></div>
+<button type="button" class="btn wide" id="newSettingsTask">↻ Новая задача с этими настройками</button>
+<p class="note">Изменения настроек применяются к следующей задаче. Счётчики сохраняются только в этом браузере.</p>
+<div class="breakdown"><h3>Точность по темам</h3><div id="breakdown"></div><p class="note">Точность считается по попыткам, включая повторные ошибки.</p></div>
+</aside>
+<main class="panel">
+<div class="session"><h2 style="margin:0">Реши задачу</h2><span id="categoryTag" class="pill">Тип 1</span></div>
+<div id="question" class="question" aria-live="polite"></div>
+<form id="answerForm" autocomplete="off">
+<label for="answerInput" class="muted">Твой ответ</label>
+<div class="answerRow">
+<input type="text" id="answerInput" inputmode="decimal" placeholder="Введи ответ" required>
+<span id="answerUnit"></span>
+</div>
+<p id="answerHint" class="sideNote">Можно вводить десятичные числа с запятой или точкой.</p>
+<div class="toolbar">
+<button type="submit" class="btn" id="checkBtn">Проверить</button>
+<button type="button" class="btn subtle" id="showBtn">Показать решение</button>
+<button type="button" class="btn outline" id="nextBtn">Следующий →</button>
+</div>
+</form>
+<div class="message" id="feedback" aria-live="polite">Решение скрыто до проверки.</div>
+<div class="solution" id="solution" hidden><h3>Пошаговое решение</h3><ol id="steps"></ol><p id="finalAnswer"></p></div>
+</main>
+</div>
+</div>
+<footer><div class="container">TGO TRACK · Тренировка процентов для КТ · <a href="./fractions.html">Тренажёр дробей</a> · <a href="./index.html">Вернуться к программе</a></div></footer>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const titles=["","Процент от числа","Исходное число","Число в процентах","Изменение величины","Последовательные изменения","Неизвестный процент","Процентная разница","Смеси и концентрации"];
+const storageKey="tgo-percentages-v1";
+let stats={correct:0,wrong:0,streak:0,types:{}};
+try{const old=JSON.parse(localStorage.getItem(storageKey)||"null");if(old&&typeof old==="object"){stats={...stats,...old};if(!stats.types||typeof stats.types!=="object")stats.types={}}}catch(e){}
+let current=null;let finished=false;
+function r(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function choice(arr){return arr[r(0,arr.length-1)]}
+function rnd2(n){return Math.round((n+Number.EPSILON)*100)/100}
+function number(n){return String(rnd2(n)).replace(".",",")}
+function gcd(x,y){x=Math.abs(x);y=Math.abs(y);while(y){const rem=x%y;x=y;y=rem}return x||1}
+function getRange(){return Number(document.querySelector('input[name="maxnumber"]:checked').value)}
+function setting(){return {level:document.querySelector('input[name="difficulty"]:checked').value,max:getRange()}}
+function base(settings){
+const m=settings.max;
+if(settings.level==="easy")return 20*r(1,Math.max(1,Math.floor(m/20)));
+if(settings.level==="medium")return 10*r(1,Math.max(1,Math.floor(m/10)));
+return r(10,m);
+}
+function percent(level){
+if(level==="easy")return choice([5,10,20,25,50]);
+if(level==="medium")return choice([5,10,15,20,25,30,40,50,60,75]);
+return r(2,85);
+}
+function exactBase(s,ps){
+const m=s.max;
+const unit=s.level==="easy"?20:s.level==="medium"?20:100;
+let high=Math.floor(m/unit);
+if(high<1)return base(s);
+return unit*r(1,high);
+}
+function typeTask(id,s){
+let a,b,p,q,out,n,up,up2,first,second,high,low,t,part,ratioA,ratioB,g;
+switch(id){
+case 1:
+a=exactBase(s);p=percent(s.level);out=rnd2(a*p/100);
+return {id,prompt:"Найди "+p+"% от числа "+number(a)+".",value:out,unit:"",steps:["Переведи процент в долю: "+p+"/100.","Умножь число на долю: "+number(a)+" × "+p+"/100 = "+number(out)+"."]};
+case 2:
+a=exactBase(s);p=percent(s.level);part=rnd2(a*p/100);
+return {id,prompt:p+"% некоторого числа равны "+number(part)+". Чему равно исходное число?",value:a,unit:"",steps:["Если "+p+"% равны "+number(part)+", то 1% равен "+number(rnd2(part/p))+".","Исходное число = "+number(part)+" × 100 / "+p+" = "+number(a)+"."]};
+case 3:
+a=exactBase(s);p=percent(s.level);part=rnd2(a*p/100);
+return {id,prompt:"Сколько процентов составляет "+number(part)+" от "+number(a)+"?",value:p,unit:"%",steps:["Раздели часть на целое: "+number(part)+" / "+number(a)+".","Умножь на 100%: ("+number(part)+" / "+number(a)+") × 100 = "+number(p)+"%."]};
+case 4:
+a=exactBase(s);p=percent(s.level);up=Math.random()<.5;
+out=rnd2(a*(up?100+p:100-p)/100);
+return {id,prompt:"Число "+number(a)+" "+(up?"увеличили":"уменьшили")+" на "+p+"%. Каким оно стало?",value:out,unit:"",steps:["Коэффициент изменения: "+(up?"1 + ":"1 − ")+p+"/100 = "+number((up?100+p:100-p)/100)+".","Новое число: "+number(a)+" × "+number((up?100+p:100-p)/100)+" = "+number(out)+"."]};
+case 5:
+a=exactBase(s);p=percent(s.level);q=percent(s.level);up=Math.random()<.5;up2=Math.random()<.5;
+first=rnd2(a*(up?100+p:100-p)/100);second=rnd2(first*(up2?100+q:100-q)/100);
+return {id,prompt:"Число "+number(a)+" сначала "+(up?"увеличили":"уменьшили")+" на "+p+"%, а затем "+(up2?"увеличили":"уменьшили")+" на "+q+"%. Какой результат?",value:second,unit:"",steps:["После первого изменения: "+number(a)+" × "+number((up?100+p:100-p)/100)+" = "+number(first)+".","После второго: "+number(first)+" × "+number((up2?100+q:100-q)/100)+" = "+number(second)+".","Важно: второй процент считается от уже изменённого числа."]};
+case 6:
+a=exactBase(s);p=percent(s.level);q=percent(s.level);up=Math.random()<.5;up2=Math.random()<.5;
+first=rnd2(a*(up?100+p:100-p)/100);second=rnd2(first*(up2?100+q:100-q)/100);
+return {id,prompt:"Число "+number(a)+" сначала "+(up?"увеличили":"уменьшили")+" на "+p+"%, а затем "+(up2?"увеличили":"уменьшили")+" на x%. Получилось "+number(second)+". Найди x.",value:q,unit:"%",steps:["Найди промежуточное значение: "+number(a)+" × "+number((up?100+p:100-p)/100)+" = "+number(first)+".","Доля изменения = |"+number(second)+" − "+number(first)+"| / "+number(first)+".","x = |"+number(second)+" − "+number(first)+"| / "+number(first)+" × 100 = "+number(q)+"%."]};
+case 7:
+a=exactBase(s);p=percent(s.level);up=Math.random()<.5;b=rnd2(a*(up?100+p:100-p)/100);
+return {id,prompt:"Цена "+(up?"выросла":"снизилась")+" с "+number(a)+" до "+number(b)+". На сколько процентов "+(up?"она выросла":"она снизилась")+"?",value:p,unit:"%",steps:["Изменение цены: |"+number(b)+" − "+number(a)+"| = "+number(Math.abs(b-a))+".","Процент изменения считаем от старой цены: "+number(Math.abs(b-a))+" / "+number(a)+" × 100 = "+number(p)+"%."]};
+case 8:
+low=s.level==="easy"?choice([5,10,15]):s.level==="medium"?r(2,20):r(1,35);
+high=s.level==="easy"?choice([30,40,50]):s.level==="medium"?r(30,65):r(40,95);
+if(high<=low+1)high=low+2;
+t=r(low+1,high-1);
+ratioA=t-low;ratioB=high-t;g=gcd(ratioA,ratioB);ratioA/=g;ratioB/=g;
+return {id,prompt:"Есть раствор A с "+high+"% вещества и раствор Б с "+low+"%. В каком отношении масс A : Б их нужно смешать, чтобы получить "+t+"% раствор?",ratio:[ratioA,ratioB],unit:"A : Б",steps:["Пусть массы растворов A и Б равны a и b.","Из условия: "+high+"a + "+low+"b = "+t+"(a+b).","("+high+" − "+t+")a = ("+t+" − "+low+")b.","Поэтому a : b = ("+t+" − "+low+") : ("+high+" − "+t+") = "+ratioA+" : "+ratioB+"."]};
+default:throw Error("Unknown task");
+}
+}
+function safeStore(){try{localStorage.setItem(storageKey,JSON.stringify(stats))}catch(e){}}
+function bucket(id){if(!stats.types[id])stats.types[id]={correct:0,wrong:0};return stats.types[id]}
+function drawStats(){
+$("correctTotal").textContent=stats.correct;$("wrongTotal").textContent=stats.wrong;$("streakTotal").textContent=stats.streak;
+$("breakdown").innerHTML=titles.slice(1).map((t,i)=>{const x=stats.types[i+1]||{correct:0,wrong:0};const total=x.correct+x.wrong;const rate=total?Math.round(x.correct/total*100):0;return '<div class="breakdownrow"><span>'+t+'</span><div class="track"><span style="width:'+rate+'%"></span></div><b>'+(total?rate+"%":"—")+'</b></div>'}).join("");
+}
+function selectedIds(){return Array.from(document.querySelectorAll(".category:checked")).map(x=>Number(x.value))}
+function updateCategory(ids){document.querySelectorAll(".category").forEach(x=>{x.checked=ids.includes(Number(x.value))});$("settingsFeedback").textContent=""}
+function build(){
+const ids=selectedIds();
+if(!ids.length){$("settingsFeedback").textContent="Выбери хотя бы один тип задач.";return false}
+$("settingsFeedback").textContent="";
+const id=choice(ids);
+current=typeTask(id,setting());finished=false;
+$("categoryTag").textContent="Тип "+id+": "+titles[id];
+$("question").textContent=current.prompt;
+$("answerInput").value="";
+$("answerInput").placeholder=current.ratio?"Например, 1:2":"Например, 25";
+$("answerInput").setAttribute("inputmode",current.ratio?"text":"decimal");
+$("answerUnit").textContent=current.ratio?"отношение":current.unit;
+$("answerHint").textContent=current.ratio?"Введи отношение A : Б, например 1:2 или 2:4.":current.unit==="%"?"Вводи только число, без знака %. Можно использовать запятую.":"Ответ может быть дробным: 12,5 или 12.5.";
+$("checkBtn").disabled=false;$("showBtn").disabled=false;
+$("solution").hidden=true;
+$("feedback").textContent="Ответ ещё не проверен.";$("feedback").className="message";
+$("answerInput").focus();
+return true;
+}
+function showSteps(){
+if(!current)return;
+const steps=$("steps");steps.replaceChildren();
+current.steps.forEach(line=>{const li=document.createElement("li");li.textContent=line;steps.appendChild(li)});
+$("finalAnswer").textContent="Ответ: "+(current.ratio?current.ratio[0]+":"+current.ratio[1]:number(current.value)+current.unit);
+$("solution").hidden=false;
+}
+function resultMessage(msg,ok){$("feedback").textContent=msg;$("feedback").className="message "+(ok?"success":"fail")}
+function check(e){
+e.preventDefault();if(!current||finished)return;
+let text=$("answerInput").value.trim();
+let correct=false;
+if(current.ratio){
+const match=text.match(/^(\d+)\s*[:/]\s*(\d+)$/);
+if(!match||Number(match[1])<1||Number(match[2])<1){resultMessage("Введи отношение в формате A:Б, например 1:2.",false);return}
+const x=Number(match[1]),y=Number(match[2]);
+correct=Number.isSafeInteger(x)&&Number.isSafeInteger(y)&&x*current.ratio[1]===y*current.ratio[0];
+}else{
+text=text.replace(/\s/g,"").replace(/%$/,"").replace(",",".");
+if(!/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(text)){resultMessage("Введи число, например 25 или 12,5.",false);return}
+const value=Number(text);
+correct=Number.isFinite(value)&&Math.abs(value-current.value)<0.005;
+}
+const b=bucket(current.id);
+if(correct){
+stats.correct++;stats.streak++;b.correct++;finished=true;
+$("checkBtn").disabled=true;
+resultMessage("Верно! Можешь перейти к следующей задаче или посмотреть решение.",true);
+}else{
+stats.wrong++;stats.streak=0;b.wrong++;
+resultMessage("Пока не совпадает. Попробуй ещё раз — задание остаётся тем же.",false);
+}
+safeStore();drawStats();
+}
+$("answerForm").addEventListener("submit",check);
+$("showBtn").addEventListener("click",()=>{showSteps();if(!finished){finished=true;$("checkBtn").disabled=true;resultMessage("Решение открыто. Попробуй следующую задачу самостоятельно.",false)}$("showBtn").disabled=true});
+$("nextBtn").addEventListener("click",build);
+$("newSettingsTask").addEventListener("click",build);
+$("selectAll").addEventListener("click",()=>updateCategory([1,2,3,4,5,6,7,8]));
+$("selectBase").addEventListener("click",()=>updateCategory([1,2,3,4]));
+$("selectHard").addEventListener("click",()=>updateCategory([5,6,7,8]));
+drawStats();build();
+})();
+</script>
+</body></html>
