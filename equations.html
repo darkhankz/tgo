@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b111c">
+<meta name="description" content="Тренажёр уравнений для подготовки к КТ магистратуры: 8 тем, случайные примеры, пошаговые решения.">
+<title>Уравнения — TGO TRACK</title>
+<style>
+:root{color-scheme:dark;--bg:#0b111c;--panel:#152133;--line:#2e4055;--text:#ebf3fa;--soft:#a2b4c5;--lime:#c7fd7b;--blue:#8bcdff;--red:#ff9e9e;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% -10%,#284454,transparent 50%),var(--bg);color:var(--text);min-height:100vh}
+button,input{font:inherit}button{cursor:pointer}a{color:var(--lime)}a:hover{opacity:.85}
+.container{max-width:1180px;margin:auto;padding:0 22px}
+header{background:#101824eb;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;backdrop-filter:blur(13px)}
+nav{min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{text-decoration:none;font-size:15px;letter-spacing:1.5px;font-weight:900;color:var(--text)}.logo b{color:var(--lime)}
+.back{font-size:13px;color:var(--soft);text-decoration:none}
+.hero{padding:43px 0 25px}.kicker{letter-spacing:1.8px;text-transform:uppercase;color:var(--lime);font-size:12px;font-weight:850}
+h1{font-size:clamp(38px,5vw,59px);line-height:1.06;letter-spacing:-.055em;margin:12px 0}
+.sub{color:var(--soft);max-width:765px;line-height:1.6;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:23px}
+.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:19px}
+.stat{padding:18px}.stat strong{display:block;font-size:30px;font-variant-numeric:tabular-nums}.stat small{color:var(--soft)}
+.layout{display:grid;grid-template-columns:345px minmax(0,1fr);gap:20px;padding-bottom:48px}.panel{padding:22px}
+h2{font-size:19px;letter-spacing:-.02em;margin:0 0 20px}h3{font-size:14px;margin:0 0 10px}
+.field{margin:22px 0}.field:first-of-type{margin-top:0}
+.choices{display:grid;gap:8px}.choices label,.variants label{font-size:13px;cursor:pointer;display:flex;gap:8px;align-items:center;padding:10px 11px;min-height:42px;border:1px solid var(--line);border-radius:11px;background:#0f1b2b}
+.choices label:has(input:checked),.variants label:has(input:checked){border-color:#7a9b62;background:#26392f}
+input[type=checkbox],input[type=radio]{accent-color:var(--lime);width:16px;height:16px;flex:none}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.variants{display:grid;gap:7px}
+.variants.three{grid-template-columns:repeat(3,minmax(0,1fr))}.variants.three label{justify-content:center;font-size:12px}
+.btn{border-radius:11px;padding:12px 16px;background:var(--lime);border:1px solid var(--lime);color:#14221a;font-weight:850;font-size:14px}
+.btn:hover{filter:brightness(1.08)}.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.secondary{background:#293d50;color:var(--text);border-color:#49627b}
+.btn.ghost{background:transparent;color:#e1edf8;border-color:#4e6681}
+.btn.mini{padding:8px 10px;font-size:12px}
+.btn.full{width:100%}
+.help{color:var(--soft);font-size:12px;line-height:1.6}
+.error{color:var(--red);font-size:13px;line-height:1.4}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pill{font-size:12px;border:1px solid #547548;color:#c8f9ad;background:#23362b;border-radius:999px;padding:6px 10px;white-space:nowrap}
+.equation{font-weight:750;font-size:clamp(23px,3vw,36px);line-height:1.6;letter-spacing:.005em;overflow-wrap:anywhere;min-height:160px;display:flex;align-items:center;justify-content:center;text-align:center;margin:20px 0}
+.prompt{font-size:14px;color:var(--soft);min-height:25px;line-height:1.5}
+.answerRow{display:flex;flex-wrap:wrap;gap:13px;margin:18px 0}
+.answer{display:flex;flex-direction:column;gap:6px}
+.answer span{font-size:12px;color:var(--soft)}
+.answer input{width:130px;max-width:100%;border-radius:11px;padding:12px;background:#0d1928;color:var(--text);border:1px solid #587187;font-size:21px;font-weight:750;text-align:center}
+.answer input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.message{color:var(--soft);min-height:45px;font-size:14px;line-height:1.6;margin:12px 0}
+.message.good{color:var(--lime)}.message.bad{color:var(--red)}
+.solve{background:#0b1927;border:1px solid #3a5369;border-radius:14px;padding:17px;margin-top:18px}
+.solve h3{margin:0 0 14px}.solve ol{margin:0;padding-left:22px;color:#dbe8f4;font-size:14px;line-height:1.75}
+.solve li{margin:7px 0}.solve p{color:var(--lime);font-weight:800;font-size:16px;margin-bottom:2px}
+.bar{width:100%;height:7px;border-radius:999px;background:#34485e;overflow:hidden}.bar span{display:block;height:100%;background:var(--lime);border-radius:999px}
+.precision{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+.precision-item{display:grid;grid-template-columns:minmax(0,1fr) 83px 38px;gap:8px;align-items:center;color:#cdddec;font-size:12px;margin:10px 0}
+footer{border-top:1px solid var(--line);padding:23px 0;color:var(--soft);font-size:12px}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.hero{padding-top:26px}.panel{padding:18px}.equation{min-height:105px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:24px}}
+@media(max-width:450px){.variants.three{grid-template-columns:1fr}.stat strong{font-size:23px}.row>.btn{flex:1}.answer input{width:118px}}
+</style>
+</head>
+<body>
+<header><div class="container"><nav><a class="logo" href="./index.html">↗ TGO <b>TRACK</b></a><a class="back" href="./index.html">← К роадмапу</a></nav></div></header>
+<div class="container">
+<section class="hero"><div class="kicker">КТ · критическое мышление · 8 тем</div><h1>Тренажёр уравнений</h1><p class="sub">От линейных до кубических. Выбирай типы и сложность, решай случайные задачи и разбирай решения. Корни генерируются заранее, поэтому ответы проверяются точно.</p></section>
+<div class="stats">
+<div class="stat"><strong id="nCorrect">0</strong><small>верных попыток</small></div>
+<div class="stat"><strong id="nWrong">0</strong><small>ошибок</small></div>
+<div class="stat"><strong id="nStreak">0</strong><small>серия подряд</small></div>
+</div>
+<div class="layout">
+<aside class="panel">
+<h2>Настройки</h2>
+<div class="field">
+<h3>Выбери типы уравнений</h3>
+<div class="row" style="margin-bottom:12px">
+<button type="button" class="btn mini secondary" id="basic">База 1–3</button>
+<button type="button" class="btn mini secondary" id="all">Все 8</button>
+<button type="button" class="btn mini ghost" id="advanced">Сложные 6–8</button>
+</div>
+<div class="choices" id="types">
+<label><input class="kind" type="checkbox" value="1" checked> 1. Простые линейные</label>
+<label><input class="kind" type="checkbox" value="2" checked> 2. Неизвестное по обе стороны</label>
+<label><input class="kind" type="checkbox" value="3" checked> 3. Уравнения со скобками</label>
+<label><input class="kind" type="checkbox" value="4"> 4. Дробные уравнения</label>
+<label><input class="kind" type="checkbox" value="5"> 5. Пропорции</label>
+<label><input class="kind" type="checkbox" value="6"> 6. Квадратные уравнения</label>
+<label><input class="kind" type="checkbox" value="7"> 7. Формулы и разложение</label>
+<label><input class="kind" type="checkbox" value="8"> 8. Кубические уравнения</label>
+</div>
+</div>
+<div class="field">
+<h3>Сложность</h3>
+<div class="variants">
+<label><input name="difficulty" type="radio" value="easy" checked> Лёгкая — целые корни</label>
+<label><input name="difficulty" type="radio" value="medium"> Средняя — отрицательные и дробные</label>
+<label><input name="difficulty" type="radio" value="hard"> Сложная — больше преобразований</label>
+</div>
+</div>
+<div class="field">
+<h3>Предел коэффициентов</h3>
+<div class="variants three">
+<label><input name="limit" type="radio" value="10" checked>До 10</label>
+<label><input name="limit" type="radio" value="20">До 20</label>
+<label><input name="limit" type="radio" value="99">До 99</label>
+</div>
+<p class="help">Коэффициенты исходных уравнений ограничены выбранным пределом. Для кубических задач подбираются небольшие целые корни.</p>
+</div>
+<div class="field">
+<h3>Режим ответа</h3>
+<div class="variants">
+<label><input type="radio" name="goal" value="all" checked> Найти все действительные корни</label>
+<label><input type="radio" name="goal" value="positive"> Найти наибольший положительный корень</label>
+<label><input type="radio" name="goal" value="sum"> Найти сумму различных действительных корней</label>
+<label><input type="radio" name="goal" value="mixed"> Случайный тип вопроса (как в КТ)</label>
+</div>
+</div>
+<div class="field">
+<h3>Подбор задач</h3>
+<div class="variants">
+<label><input type="radio" name="mode" value="random" checked> Случайные выбранные темы</label>
+<label><input type="radio" name="mode" value="weak"> Чаще темы, в которых ошибаюсь</label>
+</div>
+</div>
+<p class="error" id="settingsError" aria-live="polite"></p>
+<button type="button" class="btn full" id="newTask">↻ Сгенерировать задачу</button>
+<div class="precision"><h3>Точность по темам</h3><div id="precision"></div><p class="help">Все попытки учитываются. Прогресс хранится в этом браузере.</p></div>
+</aside>
+<main class="panel">
+<div class="topline"><h2 style="margin:0">Реши уравнение</h2><span class="pill" id="topicTag">Тип 1</span></div>
+<div class="equation" id="equation"></div>
+<p class="prompt" id="prompt"></p>
+<form id="answerForm" autocomplete="off">
+<div class="answerRow" id="answerFields"></div>
+<p class="help" id="answerHelp">Можно вводить целое число, десятичную дробь или 3/2.</p>
+<div class="row" style="margin-top:20px">
+<button type="submit" class="btn" id="check">Проверить</button>
+<button type="button" class="btn secondary" id="reveal">Показать решение</button>
+<button type="button" class="btn ghost" id="next">Следующая →</button>
+</div></form>
+<p class="message" id="feedback" aria-live="polite">Введи все корни и нажми «Проверить».</p>
+<div class="solve" id="solution" hidden><h3>Пошаговое решение</h3><ol id="steps"></ol><p id="final"></p></div>
+</main>
+</div>
+</div>
+<footer><div class="container">TGO TRACK · Уравнения · <a href="./fractions.html">Дроби</a> · <a href="./percentages.html">Проценты</a> · <a href="./index.html">30-дневный роадмап</a></div></footer>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const names=["","Простые линейные","По обе стороны","Со скобками","Дробные","Пропорции","Квадратные","Формулы и разложение","Кубические"];
+const key="tgo-equations-v1";
+let stats={correct:0,wrong:0,streak:0,types:{}};
+try{let o=JSON.parse(localStorage.getItem(key)||"null");if(o&&typeof o==="object"){stats={...stats,...o};if(!stats.types||typeof stats.types!=="object")stats.types={}}}catch(e){}
+let current=null,done=false;
+function r(min,max){return min+Math.floor(Math.random()*(max-min+1))}
+function choose(a){return a[r(0,a.length-1)]}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){let t=a%b;a=b;b=t}return a||1}
+function F(n,d=1){if(d===0)throw Error("Zero denominator");if(d<0){n=-n;d=-d}let g=gcd(n,d);return {n:n/g,d:d/g}}
+function add(a,b){return F(a.n*b.d+b.n*a.d,a.d*b.d)}
+function eq(a,b){return a.n===b.n&&a.d===b.d}
+function sum(a){return a.reduce((s,x)=>add(s,x),F(0))}
+function fmt(a){return a.d===1?String(a.n):a.n+"/"+a.d}
+function plain(n){return n<0?"−"+Math.abs(n):String(n)}
+function signed(n){return n<0?" − "+Math.abs(n):" + "+n}
+function expr(coeffs){
+const powers=coeffs.length-1;let out="";
+for(let i=0;i<coeffs.length;i++){
+const x=coeffs[i],p=powers-i;if(!x)continue;
+let unit=p===0?"":p===1?"x":"x"+(p===2?"²":"³");
+const mag=Math.abs(x);const part=(p!==0&&mag===1?"":mag)+unit;
+out+=(out?(x>0?" + ":" − "):(x<0?"−":""))+part;
+}
+return out||"0";
+}
+function parenthesis(n){return n>=0?"(x − "+n+")":"(x + "+Math.abs(n)+")"}
+function rootsDistinct(arr){let found=[];arr.forEach(x=>{if(!found.some(v=>eq(v,x)))found.push(x)});return found.sort((a,b)=>a.n/a.d-b.n/b.d)}
+function nearInt(n){return Number.isSafeInteger(n)}
+function root(level,max,forcePositive=false){
+const den=level==="easy"?1:level==="medium"?choose([1,1,1,2]):choose([1,1,2,3]);
+let radius=level==="easy"?Math.min(max,6):level==="medium"?Math.min(max,7):Math.min(max,9);
+let n=forcePositive?r(1,radius):r(-radius,radius);if(!n)n=forcePositive?1:choose([-2,2]);
+return F(n,den);
+}
+function rootText(arr){return arr.length?arr.map(fmt).join("; "):"нет действительных корней"}
+function generate(id,level,cap){
+for(let attempt=0;attempt<2500;attempt++){
+let x,a,b,c,d,k,m,n,q,p,h,t,z,A,B,C,D,R,rs,steps,statement;
+if(id===1){
+x=root(level,cap);a=x.d*r(1,Math.max(1,Math.min(5,Math.floor(cap/x.d))));b=r(-Math.min(6,cap),Math.min(6,cap));if(!b)b=2;
+c=a*x.n/x.d+b;
+if(Math.max(Math.abs(a),Math.abs(b),Math.abs(c))>cap)continue;
+statement=expr([a,b])+" = "+plain(c);
+steps=["Перенеси свободное слагаемое: "+a+"x = "+plain(c)+" − ("+plain(b)+") = "+plain(c-b)+".","Раздели обе части на "+a+": x = "+plain(c-b)+"/"+a+" = "+fmt(x)+"."];
+rs=[x];
+}
+else if(id===2){
+x=root(level,cap);k=choose([-3,-2,-1,1,2,3]);c=r(-Math.min(4,cap),Math.min(4,cap));if(!c)c=1;
+a=c+k*x.d;b=r(-Math.min(4,cap),Math.min(4,cap));d=b+k*x.n;
+if(!a||Math.max(Math.abs(a),Math.abs(b),Math.abs(c),Math.abs(d))>cap)continue;
+statement=expr([a,b])+" = "+expr([c,d]);
+steps=["Перенеси слагаемые с x налево: ("+a+" − ("+c+"))x = "+d+" − ("+b+").","Получаем "+(a-c)+"x = "+(d-b)+".","Раздели на "+(a-c)+": x = "+fmt(x)+"."];
+rs=[x];
+}
+else if(id===3){
+x=root(level,cap);p=r(1,Math.min(3,cap));q=x.d*r(1,Math.max(1,Math.min(3,Math.floor(cap/x.d))));
+b=r(-Math.min(3,cap),Math.min(3,cap));t=r(-Math.min(3,cap),Math.min(3,cap));d=p*(q*x.n/x.d+b)+t;
+if(!p||!q||Math.max(p,q,Math.abs(b),Math.abs(t),Math.abs(d))>cap)continue;
+statement=p+ "("+expr([q,b])+")"+(t?signed(t):"")+" = "+plain(d);
+steps=["Раскрой скобки: "+expr([p*q,p*b+t])+" = "+plain(d)+".","Перенеси число: "+(p*q)+"x = "+(d-(p*b+t))+".","Раздели на "+(p*q)+": x = "+fmt(x)+"."];
+rs=[x];
+}
+else if(id===4){
+x=root(level,cap);q=r(2,Math.min(6,cap));c=r(1,Math.min(5,cap));
+if(level==="easy"){ // x/q + c = R
+R=add(F(x.n,x.d*q),F(c));
+statement="x/"+q+" + "+c+" = "+fmt(R);
+steps=["Вычти "+c+" из обеих частей: x/"+q+" = "+fmt(F(x.n,x.d*q))+".","Умножь обе части на "+q+": x = "+fmt(x)+"."];
+}
+else{
+a=r(1,Math.min(4,cap));b=r(2,Math.min(6,cap));d=r(2,Math.min(6,cap));
+R=add(F(a*x.n,b*x.d),F(c,d));
+statement=a+"x/"+b+" + "+c+"/"+d+" = "+fmt(R);
+steps=["Вычти "+c+"/"+d+": "+a+"x/"+b+" = "+fmt(F(a*x.n,b*x.d))+".","Умножь на "+b+"/"+a+": x = "+fmt(x)+"."];
+if(Math.max(a,b,c,d)>cap)continue;
+}
+if(Math.abs(R.n)>cap||R.d>cap)continue;rs=[x];
+}
+else if(id===5){
+a=r(1,Math.min(7,cap));b=r(2,Math.min(7,cap));c=r(2,Math.min(7,cap));
+if(level==="easy"||level==="medium"){
+x=F(a*c,b);if(Math.abs(x.n)>cap||x.d>cap)continue;
+statement=a+"/"+b+" = x/"+c;
+steps=["Перемножь крест-накрест: "+b+"x = "+(a*c)+".","Раздели на "+b+": x = "+fmt(x)+"."];
+}else{
+t=r(1,Math.min(4,cap));x=add(F(a*b,c),F(-t));
+if(Math.abs(x.n)>cap||x.d>cap)continue;
+statement="(x + "+t+")/"+b+" = "+a+"/"+c;
+steps=["Перемножь крест-накрест: "+c+"(x + "+t+") = "+(a*b)+".","Раздели на "+c+": x + "+t+" = "+fmt(F(a*b,c))+".","Вычти "+t+": x = "+fmt(x)+"."];
+}
+rs=[x];
+}
+else if(id===6){
+const variant=level==="easy"?choose(["two","two","double"]):choose(["two","two","double","none"]);
+if(variant==="none"){
+a=1;h=r(-Math.min(3,cap),Math.min(3,cap));k=r(1,Math.min(5,cap));A=a;B=-2*a*h;C=a*h*h+k;
+if(Math.max(Math.abs(A),Math.abs(B),Math.abs(C))>cap)continue;
+D=B*B-4*A*C;if(D>=0)continue;
+statement=expr([A,B,C])+" = 0";
+steps=["Используй дискриминант D = b² − 4ac.","D = ("+B+")² − 4×"+A+"×"+C+" = "+D+".","Так как D < 0, действительных корней нет."];
+rs=[];
+}else{
+x=root(level,cap);z=variant==="double"?x:root(level,cap);
+if(variant==="two"&&eq(x,z))continue;
+A=x.d*z.d;B=-(x.d*z.n+z.d*x.n);C=x.n*z.n;
+if(Math.max(Math.abs(A),Math.abs(B),Math.abs(C))>cap)continue;
+D=B*B-4*A*C;if(D<0)continue;
+statement=expr([A,B,C])+" = 0";
+steps=["Коэффициенты: a = "+A+", b = "+B+", c = "+C+".","D = b² − 4ac = "+D+".","x = (−b ± √D)/(2a) = "+fmt(x)+(eq(x,z)?" (двукратный корень).":" или "+fmt(z)+".")];
+rs=rootsDistinct([x,z]);
+}
+}
+else if(id===7){
+if(level==="easy"){
+p=r(1,Math.min(7,cap));statement="(x − "+p+")(x + "+p+") = 0";
+steps=["Произведение равно нулю, если один из множителей равен нулю.","x − "+p+" = 0 или x + "+p+" = 0.","Значит x = "+p+" или x = −"+p+"."];
+rs=[F(-p),F(p)];
+}else if(level==="medium"){
+p=r(1,Math.min(5,cap));t=r(1,Math.min(5,cap));k=p*p-t*t;
+if(Math.abs(k)>cap)continue;
+statement="(x − "+p+")(x + "+p+")"+(k?signed(k):"")+" = 0";
+steps=["Используй разность квадратов: (x − "+p+")(x + "+p+") = x² − "+(p*p)+".","Получаем x² − "+(t*t)+" = 0.","Значит x² = "+(t*t)+" и x = ±"+t+"."];
+rs=[F(-t),F(t)];
+}else{
+p=r(-Math.min(5,cap),Math.min(5,cap));t=r(1,Math.min(5,cap));if(t*t>cap)continue;
+statement="("+expr([1,-p])+")² − "+(t*t)+" = 0";
+steps=["Выдели квадрат: (x "+(p>=0?"− "+p:"+ "+Math.abs(p))+")² = "+(t*t)+".","Возьми квадратный корень с двумя знаками: x "+(p>=0?"− "+p:"+ "+Math.abs(p))+" = ±"+t+".","Следовательно, x = "+(p-t)+" или x = "+(p+t)+"."];
+rs=[F(p-t),F(p+t)];
+}
+}
+else if(id===8){
+let vals=[];
+for(let i=0;i<3;i++)vals.push(root(level==="easy"?"easy":"medium",cap).n);
+if(level==="easy"){vals=vals.map(v=>Math.abs(v)%4+1);}
+else vals=vals.map(v=>Math.max(-4,Math.min(4,v)));
+a=vals[0];b=vals[1];c=vals[2];
+A=1;B=-(a+b+c);C=a*b+a*c+b*c;D=-a*b*c;
+if(Math.max(Math.abs(B),Math.abs(C),Math.abs(D))>cap)continue;
+statement=level==="easy"?parenthesis(a)+parenthesis(b)+parenthesis(c)+" = 0":expr([A,B,C,D])+" = 0";
+steps=level==="easy"?["Произведение трёх множителей равно нулю, если хотя бы один равен нулю.","Реши x − ("+a+") = 0, x − ("+b+") = 0 и x − ("+c+") = 0."]:
+["Попробуй целые делители свободного члена "+D+" как возможные корни.","Разложение: "+parenthesis(a)+parenthesis(b)+parenthesis(c)+" = 0.","Каждый множитель приравняй к нулю."];
+rs=rootsDistinct(vals.map(v=>F(v)));
+}
+else throw Error("Bad type");
+if(rs&&rs.every(v=>Number.isSafeInteger(v.n)&&Number.isSafeInteger(v.d))){
+return {type:id,equation:statement,roots:rootsDistinct(rs),steps:steps};
+}
+}
+throw Error("Could not generate type "+id+" for "+level+" max "+cap);
+}
+function selectIds(){return Array.from(document.querySelectorAll(".kind:checked")).map(x=>Number(x.value))}
+function settings(){return {level:document.querySelector('input[name="difficulty"]:checked').value,cap:Number(document.querySelector('input[name="limit"]:checked').value),goal:document.querySelector('input[name="goal"]:checked').value,mode:document.querySelector('input[name="mode"]:checked').value}}
+function pickWeighted(ids,mode){
+if(mode==="random")return choose(ids);
+const weights=ids.map(i=>{let x=stats.types[i]||{correct:0,wrong:0};return 1+Math.min(8,(x.wrong||0)/((x.correct||0)+1))});
+let t=Math.random()*weights.reduce((a,b)=>a+b,0);
+for(let i=0;i<ids.length;i++){t-=weights[i];if(t<=0)return ids[i]}
+return ids[ids.length-1];
+}
+function next(){
+const ids=selectIds();if(!ids.length){$("settingsError").textContent="Выбери хотя бы один тип уравнений.";return false}
+$("settingsError").textContent="";
+const s=settings();
+let chosen=null,goal=s.goal;
+for(let i=0;i<200;i++){
+const id=pickWeighted(ids,s.mode);
+let x=generate(id,s.level,s.cap);
+goal=s.goal==="mixed"?choose(["all","all","positive","sum"]):s.goal;
+if(goal==="positive"&&!x.roots.some(v=>v.n>0))continue;
+if(goal==="sum"&&!x.roots.length)continue;
+chosen=x;break;
+}
+if(!chosen){$("settingsError").textContent="Не получилось подобрать задание с этим типом ответа. Выбери «Все корни».";return false}
+chosen.goal=goal;
+chosen.expected=goal==="all"?chosen.roots:goal==="positive"?[chosen.roots.filter(v=>v.n>0).slice(-1)[0]]:[sum(chosen.roots)];
+current=chosen;done=false;
+$("equation").textContent=current.equation;
+$("topicTag").textContent="Тип "+current.type+": "+names[current.type];
+$("prompt").textContent=goal==="all"?"Найди все различные действительные корни уравнения.":goal==="positive"?"Найди наибольший положительный корень.":"Найди сумму всех различных действительных корней.";
+const box=$("answerFields");box.replaceChildren();
+if(goal==="all"&&!current.roots.length){
+const help=document.createElement("span");help.className="help";help.textContent="Если действительных корней нет, нажми «Нет действительных корней».";box.appendChild(help);
+const button=document.createElement("button");button.type="button";button.className="btn secondary";button.id="noRoots";button.textContent="Нет действительных корней";button.addEventListener("click",()=>submitResult(true));box.appendChild(button);
+}else{
+current.expected.forEach((root,index)=>{
+const field=document.createElement("label");field.className="answer";
+const caption=document.createElement("span");caption.textContent=goal==="all"?"Корень "+(index+1):goal==="sum"?"Сумма корней":"Положительный корень";
+const inp=document.createElement("input");inp.type="text";inp.inputMode="decimal";inp.autocomplete="off";inp.placeholder="x";inp.dataset.root=String(index);
+inp.setAttribute("aria-label",caption.textContent);
+field.appendChild(caption);field.appendChild(inp);box.appendChild(field);
+});}
+$("check").disabled=false;$("reveal").disabled=false;$("solution").hidden=true;
+$("feedback").textContent="Вводи целые, десятичные числа или дроби вида 3/2. Порядок корней не важен.";
+$("feedback").className="message";
+const first=box.querySelector("input");if(first)first.focus();
+return true;
+}
+function parse(value){
+let s=value.trim().replace(/\s/g,"").replace("−","-");
+if(/^[-+]?\d+\/[-+]?\d+$/.test(s)){let p=s.split("/").map(Number);if(!p[1]||!p.every(Number.isSafeInteger))return null;return F(p[0],p[1])}
+s=s.replace(",",".");
+if(!/^[-+]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(s))return null;
+const v=Number(s);if(!Number.isFinite(v)||Math.abs(v)>1e10)return null;
+return {n:v,d:1};
+}
+function equalsAnswer(a,b){return Math.abs(a.n/a.d-b.n/b.d)<0.0001}
+function message(text,good){$("feedback").textContent=text;$("feedback").className="message "+(good?"good":"bad")}
+function precision(){
+$("nCorrect").textContent=stats.correct;$("nWrong").textContent=stats.wrong;$("nStreak").textContent=stats.streak;
+$("precision").innerHTML=names.slice(1).map((n,i)=>{const a=stats.types[i+1]||{correct:0,wrong:0};const total=(a.correct||0)+(a.wrong||0),pct=total?Math.round(a.correct/total*100):0;
+return '<div class="precision-item"><span>'+n+'</span><div class="bar"><span style="width:'+pct+'%"></span></div><b>'+(total?pct+"%":"—")+'</b></div>'}).join("");
+}
+function persist(){try{localStorage.setItem(key,JSON.stringify(stats))}catch(e){}}
+function submitResult(noRoots=false){
+if(!current||done)return;
+let ok=false;
+if(noRoots){ok=current.goal==="all"&&!current.roots.length}
+else{
+const fields=Array.from($("answerFields").querySelectorAll("input"));
+let values=fields.map(x=>parse(x.value));
+if(fields.length===current.expected.length&&values.every(v=>v!==null)){
+const used=new Set();
+ok=values.every(v=>{let j=current.expected.findIndex((candidate,j)=>!used.has(j)&&equalsAnswer(v,candidate));if(j<0)return false;used.add(j);return true;});
+}else{message("Заполни все поля числами или дробями. Например: −3/2.",false);return}
+}
+if(!stats.types[current.type])stats.types[current.type]={correct:0,wrong:0};
+if(ok){stats.correct++;stats.streak++;stats.types[current.type].correct++;done=true;$("check").disabled=true;if($("noRoots"))$("noRoots").disabled=true;message("Верно! Можешь перейти к следующему заданию или посмотреть решение.",true)}
+else{stats.wrong++;stats.streak=0;stats.types[current.type].wrong++;message("Пока неверно. Попробуй ещё раз или открой решение.",false)}
+persist();precision();
+}
+function reveal(){
+if(!current)return;
+const ul=$("steps");ul.replaceChildren();
+current.steps.forEach(s=>{const li=document.createElement("li");li.textContent=s;ul.appendChild(li)});
+const p=current.goal==="all"?"Корни: "+rootText(current.roots):current.goal==="positive"?"Наибольший положительный корень: "+fmt(current.expected[0]):"Сумма различных действительных корней: "+fmt(current.expected[0]);
+$("final").textContent=p;$("solution").hidden=false;
+if(!done){done=true;$("check").disabled=true;if($("noRoots"))$("noRoots").disabled=true;message("Решение открыто. Новую попытку сделай на следующей задаче.",false)}
+$("reveal").disabled=true;
+}
+function preset(ids){document.querySelectorAll(".kind").forEach(x=>x.checked=ids.includes(Number(x.value)));$("settingsError").textContent=""}
+$("answerForm").addEventListener("submit",e=>{e.preventDefault();submitResult(false)});
+$("reveal").addEventListener("click",reveal);
+$("next").addEventListener("click",next);
+$("newTask").addEventListener("click",next);
+$("basic").addEventListener("click",()=>preset([1,2,3]));
+$("all").addEventListener("click",()=>preset([1,2,3,4,5,6,7,8]));
+$("advanced").addEventListener("click",()=>preset([6,7,8]));
+precision();next();
+})();
+</script>
+</body>
+</html>
