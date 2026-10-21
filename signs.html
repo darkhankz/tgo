@@ -300,7 +300,7 @@ return given===task.answer;
 function record(kind){
 const b=scoreBucket(stats.byMode,task.mode);
 const p=scoreBucket(stats.byPattern,task.mode+":"+task.pattern);
-if(kind==="correct"){stats.correct++;stats.streak++;b.correct++;p.correct++;}
+if(kind==="correct"){stats.correct++;stats.streak=hadError?0:stats.streak+1;b.correct++;p.correct++;}
 else{stats.wrong++;stats.streak=0;b.wrong++;p.wrong++;}
 save();drawStats();
 }
@@ -376,7 +376,6 @@ function newQuestion(){
 if(speed&&speed.active&&task&&!solved){
 if(!hadError)record("wrong");countedCompletion(false);
 }
-if(speed&&speed.finished){speed=null;}
 return pickNew();
 }
 function beginSpeed(){
