@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b111c">
+<meta name="description" content="Тренажёр плюса и минуса для КТ: сложение, вычитание, умножение, деление, знаки и раскрытие скобок.">
+<title>Плюс и минус — TGO TRACK</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--bg:#0b111c;--panel:#152133;--line:#304359;--text:#eff5fb;--muted:#a2b5ca;--lime:#c7fd7b;--red:#ffaaa5}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% -8%,#254651,transparent 48%),var(--bg);color:var(--text)}a{color:var(--lime)}a:hover{opacity:.9}
+button,input{font:inherit}button{cursor:pointer}
+.wrap{max-width:1120px;margin:auto;padding:0 21px}
+header{position:sticky;top:0;z-index:5;background:#101824e9;backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav{height:65px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:15px;letter-spacing:1.5px;font-weight:900;text-decoration:none;color:var(--text)}.brand b{color:var(--lime)}.back{color:var(--muted);text-decoration:none;font-size:13px}
+.hero{padding:42px 0 21px}
+.kicker{color:var(--lime);font-size:12px;letter-spacing:1.7px;text-transform:uppercase;font-weight:800}
+h1{font-size:clamp(35px,6vw,58px);letter-spacing:-.055em;line-height:1.1;margin:13px 0}
+.lead{font-size:15px;color:var(--muted);max-width:780px;line-height:1.6}
+.panel,.stat{background:var(--panel);border:1px solid var(--line);border-radius:18px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:15px 0 22px}
+.stat{padding:18px}.stat strong{display:block;font-size:30px;font-variant-numeric:tabular-nums}.stat small{font-size:12px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px;padding-bottom:48px}
+.panel{padding:22px}h2{font-size:19px;margin:0 0 16px;letter-spacing:-.01em}h3{font-size:14px;margin:0 0 10px}
+.field{margin:22px 0}.field:first-of-type{margin-top:0}
+.choices{display:grid;gap:8px}.choices.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.choices label{background:#101b2a;border:1px solid var(--line);border-radius:10px;min-height:43px;display:flex;align-items:center;gap:8px;font-size:13px;padding:10px;cursor:pointer;line-height:1.25}
+.choices label:has(input:checked){border-color:#729d60;background:#24382e}
+input[type=radio],input[type=checkbox]{accent-color:var(--lime);height:16px;width:16px;flex:none}
+.btn{border-radius:11px;border:1px solid var(--lime);background:var(--lime);color:#17241a;font-size:14px;font-weight:800;padding:12px 16px}
+.btn:hover{filter:brightness(1.07)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.secondary{background:#2b4056;border-color:#4b647d;color:var(--text)}
+.btn.outline{background:transparent;border-color:#536c83;color:#e3eff8}
+.btn.mini{font-size:12px;padding:8px 10px}
+.btn.full{width:100%}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.message{min-height:39px;color:var(--muted);font-size:14px;line-height:1.5;margin:12px 0}
+.message.good{color:var(--lime)}.message.bad{color:var(--red)}
+.help{font-size:12px;color:var(--muted);line-height:1.55}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pill{font-size:12px;border-radius:999px;background:#223729;color:#c7fdaf;border:1px solid #557449;padding:6px 10px}
+.bigmath{text-align:center;min-height:158px;display:flex;align-items:center;justify-content:center;font-size:clamp(27px,5.2vw,46px);font-weight:780;letter-spacing:.01em;line-height:1.45;overflow-wrap:anywhere}
+.ask{font-size:15px;color:var(--muted);line-height:1.5;min-height:27px}
+.signs{display:flex;gap:11px;flex-wrap:wrap;margin-top:13px}
+.sign-btn{font-size:29px;font-weight:850;min-width:88px;padding:14px;background:#0e1b2b;border:2px solid #526b83;border-radius:13px;color:var(--text)}
+.sign-btn:hover{border-color:var(--lime)}.sign-btn.active{background:#304630;border-color:var(--lime);color:var(--lime)}
+.inputs{display:flex;gap:15px;flex-wrap:wrap;margin:15px 0}
+.inputs label{display:flex;flex-direction:column;gap:7px;color:var(--muted);font-size:13px}
+.inputs input{border:1px solid #557187;background:#0d1927;border-radius:11px;color:var(--text);font-size:24px;padding:12px;width:155px;max-width:100%;text-align:center}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.solution{background:#0c1a28;border:1px solid #3f586f;border-radius:13px;padding:17px;margin-top:16px}
+.solution ol{padding-left:22px;color:#e1ecf5;font-size:14px;line-height:1.75}.solution li{margin:8px 0}
+.solution p{color:var(--lime);font-weight:800}
+.progressbar{height:8px;border-radius:99px;background:#33475c;overflow:hidden}.progressbar span{display:block;height:100%;background:var(--lime)}
+.metric{display:grid;grid-template-columns:minmax(0,1fr) 68px 38px;gap:9px;align-items:center;font-size:12px;color:#d0ddec;margin:11px 0}
+.speed{background:#0c1a28;border:1px solid #415a6c;border-radius:13px;padding:14px;margin-bottom:20px}
+.speed-head{display:flex;justify-content:space-between;align-items:center;gap:7px;font-size:13px;font-weight:800;margin-bottom:9px}
+.speed p{font-size:13px;line-height:1.5;color:var(--muted);margin:8px 0}
+.rules{border-top:1px solid var(--line);margin-top:24px;padding-top:18px}
+.rules ul{margin:10px 0;padding-left:21px;color:var(--muted);font-size:13px;line-height:1.8}
+.rules b{color:var(--text)}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:13px}
+footer{border-top:1px solid var(--line);padding:24px 0;font-size:12px;color:var(--muted)}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.hero{padding-top:27px}.panel{padding:18px}.stat{padding:12px}.stat strong{font-size:23px}.stats{gap:8px}.bigmath{min-height:105px}}
+@media(max-width:420px){.choices.two{grid-template-columns:1fr 1fr}.sign-btn{min-width:75px}.row>.btn{flex:1}.inputs input{width:128px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav><a class="brand" href="./index.html">↗ TGO <b>TRACK</b></a><a class="back" href="./index.html">← К роадмапу</a></nav></div></header>
+<div class="wrap">
+<section class="hero"><div class="kicker">КТ · критическое мышление · быстрый навык</div><h1>Плюс и минус</h1><p class="lead">Тренируй отрицательные числа до автоматизма: сложение, вычитание, умножение, деление, знаки перед скобками и раскрытие скобок. Выбирай только знак результата или полный ответ.</p></section>
+<section class="stats" aria-label="Статистика">
+<div class="stat"><strong id="correctTotal">0</strong><small>решено верно</small></div>
+<div class="stat"><strong id="wrongTotal">0</strong><small>ошибок</small></div>
+<div class="stat"><strong id="streakTotal">0</strong><small>серия без ошибок</small></div>
+</section>
+<div class="layout">
+<aside class="panel">
+<h2>Настройки тренировки</h2>
+<div class="field"><h3>Операции</h3><div class="choices two" id="modeOptions">
+<label><input type="checkbox" class="operation" value="add" checked> Сложение</label>
+<label><input type="checkbox" class="operation" value="sub" checked> Вычитание</label>
+<label><input type="checkbox" class="operation" value="mul" checked> Умножение</label>
+<label><input type="checkbox" class="operation" value="div" checked> Деление</label>
+<label><input type="checkbox" class="operation" value="sign" checked> Знаки и скобки</label>
+<label><input type="checkbox" class="operation" value="expand"> Раскрытие скобок</label>
+</div><div class="row" style="margin-top:12px"><button id="chooseAll" type="button" class="btn mini secondary">Все 6</button><button id="chooseArith" type="button" class="btn mini outline">Арифметика 1–4</button></div></div>
+<div class="field"><h3>Числа до</h3><div class="choices two">
+<label><input type="radio" name="range" value="10"> 10</label><label><input type="radio" name="range" value="20" checked> 20</label><label><input type="radio" name="range" value="99"> 99</label>
+</div><p class="help">Исходные числа не превышают выбранный предел по модулю; результат умножения может быть больше.</p></div>
+<div class="field"><h3>Как отвечать</h3><div class="choices">
+<label><input type="radio" name="answerMode" value="sign"> Только знак результата</label>
+<label><input type="radio" name="answerMode" value="full"> Полный ответ</label>
+<label><input type="radio" name="answerMode" value="mixed" checked> Смешанный режим</label>
+</div></div>
+<div class="field"><h3>Подбор задач</h3><div class="choices">
+<label><input type="radio" name="adaptive" value="random" checked> Случайные примеры</label>
+<label><input type="radio" name="adaptive" value="weak"> Чаще повторять слабые операции и знаки</label>
+</div></div>
+<div id="settingsError" class="message bad" aria-live="polite"></div>
+<button id="generate" type="button" class="btn full">↻ Новая задача</button>
+<div class="rules"><h3>Правила в трёх строках</h3><ul>
+<li><b>Умножение / деление:</b> одинаковые знаки дают плюс, разные — минус.</li>
+<li><b>Вычитание:</b> a − (−b) = a + b.</li>
+<li><b>Сложение:</b> разные знаки — вычитай модули, одинаковые — складывай.</li>
+</ul></div>
+<p class="note">Прогресс сохраняется локально в браузере, без аккаунта.</p>
+</aside>
+<main class="panel">
+<div class="speed">
+<div class="speed-head"><span id="speedTitle">⚡ Быстрый тест: 20 заданий</span><strong id="timer">00:00</strong></div>
+<div class="progressbar"><span id="speedBar" style="width:0%"></span></div>
+<p id="speedDescription">Начни когда будешь готов: тест посчитает время и правильные ответы с первой попытки.</p>
+<button type="button" class="btn mini secondary" id="speedButton">Старт 20 задач</button>
+</div>
+<div class="topline"><h2 style="margin:0">Реши пример</h2><span class="pill" id="taskTag">Случайная задача</span></div>
+<div class="bigmath" id="problem" aria-live="polite"></div>
+<div class="ask" id="question"></div>
+<form id="answerForm" autocomplete="off">
+<div id="signControls" hidden><div class="signs" id="signButtons">
+<button class="sign-btn" type="button" data-sign="+" aria-label="Плюс">+</button>
+<button class="sign-btn" type="button" data-sign="−" aria-label="Минус">−</button>
+<button class="sign-btn" type="button" data-sign="0" aria-label="Ноль">0</button>
+</div><p class="help">Выбери знак. Ноль — если результат равен 0.</p></div>
+<div id="fullControls" class="inputs"></div>
+<div class="row" style="margin-top:21px">
+<button type="submit" class="btn" id="check">Проверить</button>
+<button type="button" class="btn secondary" id="show">Показать решение</button>
+<button type="button" class="btn outline" id="next">Следующий →</button>
+</div>
+</form>
+<div class="message" id="feedback" aria-live="polite">Введи ответ и нажми «Проверить».</div>
+<div class="solution" id="solution" hidden><h3>Разбор примера</h3><ol id="steps"></ol><p id="final"></p></div>
+<div style="margin-top:23px;border-top:1px solid var(--line);padding-top:18px"><h3>Точность по операциям</h3><div id="breakdown"></div><p class="help">Учитываются правильные и неправильные попытки. Ошибки по сочетаниям знаков влияют на адаптивный режим.</p></div>
+</main>
+</div>
+</div>
+<footer><div class="wrap">TGO TRACK · <a href="./index.html">Роадмап</a> · <a href="./fractions.html">Дроби</a> · <a href="./percentages.html">Проценты</a> · <a href="./equations.html">Уравнения</a></div></footer>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const modes=["add","sub","mul","div","sign","expand"];
+const names={add:"Сложение",sub:"Вычитание",mul:"Умножение",div:"Деление",sign:"Знаки и скобки",expand:"Раскрытие скобок"};
+const storageKey="tgo-signs-v1";
+let stats={correct:0,wrong:0,streak:0,byMode:{},byPattern:{}};
+try{const saved=JSON.parse(localStorage.getItem(storageKey)||"null");if(saved&&typeof saved==="object"){stats={...stats,...saved};if(!stats.byMode||typeof stats.byMode!=="object")stats.byMode={};if(!stats.byPattern||typeof stats.byPattern!=="object")stats.byPattern={}}}catch(e){}
+let task=null,format="full",selectedSign=null,solved=false,hadError=false;
+let speed=null,tick=null,summary=null;
+function rand(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function pick(a){return a[rand(0,a.length-1)]}
+function plus(n){return n>=0?"+":"−"}
+function display(n){return n<0?"−"+Math.abs(n):String(n)}
+function inner(n){return (n<0?"−":"+")+Math.abs(n)}
+function exprNumber(n){return "("+inner(n)+")"}
+function sign(n){return n===0?"0":n>0?"+":"−"}
+function fmtPercent(v){return Math.round(v)+"%"}
+function selectedOperations(){return Array.from(document.querySelectorAll(".operation:checked")).map(el=>el.value)}
+function settings(){return {limit:Number(document.querySelector('input[name="range"]:checked').value),answerMode:document.querySelector('input[name="answerMode"]:checked').value,adaptive:document.querySelector('input[name="adaptive"]:checked').value,operations:selectedOperations()}}
+function scoreBucket(obj,key){if(!obj[key]||typeof obj[key]!=="object")obj[key]={correct:0,wrong:0};return obj[key]}
+function weightBucket(obj,key){const a=obj[key]||{correct:0,wrong:0};return 1+Math.min(10,3*(a.wrong||0)/((a.correct||0)+1))}
+function weighted(items,weight){const weights=items.map(weight),sum=weights.reduce((a,b)=>a+b,0);let t=Math.random()*sum;for(let i=0;i<items.length;i++){t-=weights[i];if(t<=0)return items[i]}return items[items.length-1]}
+function chooseMode(options){return options.adaptive==="weak"?weighted(options.operations,m=>weightBucket(stats.byMode,m)):pick(options.operations)}
+function choosePattern(mode,options){
+const patterns=["++","+-","-+","--"];
+return options.adaptive==="weak"?weighted(patterns,p=>weightBucket(stats.byPattern,mode+":"+p)):pick(patterns)
+}
+function signedVal(sym,magnitude){return sym==="+"?magnitude:-magnitude}
+function arithmeticNote(a,b,op,answer){
+let steps;
+if(op==="add"||op==="sub"){
+const second=op==="sub"?-b:b;
+steps=[];
+if(op==="sub")steps.push("Заменяем вычитание сложением противоположного числа: "+display(a)+" − ("+inner(b)+") = "+display(a)+" + ("+inner(second)+").");
+if(sign(a)===sign(second)){
+steps.push("У чисел одинаковые знаки: складываем модули "+Math.abs(a)+" + "+Math.abs(second)+" = "+(Math.abs(a)+Math.abs(second))+", сохраняем их знак.");
+}else{
+steps.push("Знаки разные: вычитаем меньший модуль из большего: "+Math.max(Math.abs(a),Math.abs(second))+" − "+Math.min(Math.abs(a),Math.abs(second))+" = "+Math.abs(answer)+".");
+steps.push(answer===0?"Модули равны, поэтому результат — 0.":"Знак результата берём у числа с большим модулем: "+(answer>0?"плюс.":"минус."));
+}
+return steps;
+}
+steps=["При "+(op==="mul"?"умножении":"делении")+" "+(sign(a)===sign(b)?"одинаковые знаки дают плюс.":"разные знаки дают минус.")];
+steps.push("Работаем с модулями: "+Math.abs(a)+(op==="mul"?" × ":" ÷ ")+Math.abs(b)+" = "+Math.abs(answer)+".");
+return steps;
+}
+function makeTask(mode,options){
+const max=options.limit;
+const pat=choosePattern(mode,options);
+const sx=pat[0],sy=pat[1];
+let a=signedVal(sx,rand(1,max)),b=signedVal(sy,rand(1,max));
+let text,question="Найди результат.",answer,steps=[];
+if(mode==="add"){
+answer=a+b;text=exprNumber(a)+" + "+exprNumber(b);
+steps=arithmeticNote(a,b,mode,answer);
+}else if(mode==="sub"){
+answer=a-b;text=exprNumber(a)+" − "+exprNumber(b);
+steps=arithmeticNote(a,b,mode,answer);
+}else if(mode==="mul"){
+answer=a*b;text=exprNumber(a)+" × "+exprNumber(b);
+steps=arithmeticNote(a,b,mode,answer);
+}else if(mode==="div"){
+const divisor=rand(1,Math.min(12,max));
+const quotient=rand(1,Math.max(1,Math.floor(max/divisor)));
+b=signedVal(sy,divisor);
+a=signedVal(sx,divisor*quotient);
+answer=a/b;text=exprNumber(a)+" ÷ "+exprNumber(b);
+steps=arithmeticNote(a,b,mode,answer);
+}else if(mode==="sign"){
+const outer=sx==="+"?1:-1;
+b=signedVal(sy,rand(1,max));
+answer=outer*b;text=(outer===1?"+":"−")+exprNumber(b);
+steps=[outer===1?"Плюс перед скобками не меняет знак числа.":"Минус перед скобками меняет знак каждого слагаемого внутри.","Внутри скобок "+display(b)+", после раскрытия получаем "+display(answer)+"."];
+}else if(mode==="expand"){
+const small=Math.min(9,max);
+const k=signedVal(sx,rand(1,small));
+const c=signedVal(sy,rand(1,max));
+const xFactor=pick([-1,1])*rand(1,Math.min(5,max));
+a=k;b=c;
+answer={coef:k*xFactor,constant:k*c};
+text=display(k)+"("+ (xFactor===1?"x":xFactor===-1?"−x":display(xFactor)+"x")+(c<0?" − "+Math.abs(c):" + "+c)+")";
+question="Раскрой скобки и укажи коэффициент при x и свободный член.";
+steps=["Умножаем "+display(k)+" на каждый член в скобках по отдельности.","Коэффициент при x: "+display(k)+" × "+display(xFactor)+" = "+display(answer.coef)+".","Свободный член: "+display(k)+" × "+display(c)+" = "+display(answer.constant)+"."];
+}else throw Error("Unknown mode");
+return {mode,pattern:pat,expression:text,question,answer,steps};
+}
+function goalFor(t,f){
+if(f==="sign"){
+return t.mode==="expand"?"Какой знак у свободного члена после раскрытия скобок?":"Какой знак у результата?";
+}
+return t.question;
+}
+function answerSign(t){return sign(t.mode==="expand"?t.answer.constant:t.answer)}
+function save(){try{localStorage.setItem(storageKey,JSON.stringify(stats))}catch(e){}}
+function drawStats(){
+$("correctTotal").textContent=stats.correct;
+$("wrongTotal").textContent=stats.wrong;
+$("streakTotal").textContent=stats.streak;
+$("breakdown").innerHTML=modes.map(mode=>{
+const b=stats.byMode[mode]||{correct:0,wrong:0};const count=(b.correct||0)+(b.wrong||0);
+const pct=count?Math.round(100*(b.correct||0)/count):0;
+return '<div class="metric"><span>'+names[mode]+'</span><div class="progressbar"><span style="width:'+pct+'%"></span></div><b>'+(count?pct+"%":"—")+'</b></div>';
+}).join("");
+}
+function configureControls(t,f){
+$("signControls").hidden=f!=="sign";
+$("fullControls").hidden=f!=="full";
+selectedSign=null;
+document.querySelectorAll("[data-sign]").forEach(e=>{e.classList.remove("active");e.setAttribute("aria-pressed","false")});
+const container=$("fullControls");container.replaceChildren();
+if(f==="full"){
+const fields=t.mode==="expand"?[{id:"coef",label:"Коэффициент при x"},{id:"constant",label:"Свободный член"}]:[{id:"result",label:"Ответ"}];
+fields.forEach(field=>{
+const label=document.createElement("label");
+const caption=document.createElement("span");caption.textContent=field.label;
+const input=document.createElement("input");input.type="text";input.inputMode="numeric";input.autocomplete="off";input.placeholder="Например, −5";input.dataset.part=field.id;
+input.setAttribute("aria-label",field.label);
+label.append(caption,input);container.appendChild(label);
+});
+}
+}
+function setStatus(text,variant=""){$("feedback").textContent=text;$("feedback").className="message"+(variant?" "+variant:"")}
+function chosenConfig(){return speed&&speed.active?speed.config:settings()}
+function pickNew(){
+const s=chosenConfig();
+if(!s.operations.length){$("settingsError").textContent="Выбери хотя бы одну операцию.";return false}
+$("settingsError").textContent="";
+const mode=chooseMode(s);
+task=makeTask(mode,s);
+format=s.answerMode==="mixed"?pick(["sign","full"]):s.answerMode;
+solved=false;hadError=false;
+$("problem").textContent=task.expression;
+$("question").textContent=goalFor(task,format);
+$("taskTag").textContent=names[mode]+(format==="sign"?" · знак":" · ответ");
+configureControls(task,format);
+$("check").disabled=false;$("show").disabled=false;$("solution").hidden=true;
+setStatus("Ответ ещё не проверен. Можно нажать Enter для проверки.");
+const first=$("fullControls").querySelector("input");if(first)first.focus();
+updateSpeed();
+return true;
+}
+function readInt(raw){
+let v=raw.trim().replace(/\s/g,"").replaceAll("−","-");
+if(!/^[+-]?\d+$/.test(v))return null;
+const n=Number(v);return Number.isSafeInteger(n)?n:null;
+}
+function suppliedAnswer(){
+if(format==="sign")return selectedSign===null?{valid:false,problem:"Выбери +, − или 0."}:{valid:true,answer:selectedSign};
+const fields=Array.from($("fullControls").querySelectorAll("input"));
+const nums=fields.map(f=>readInt(f.value));
+if(nums.some(v=>v===null))return {valid:false,problem:"Заполни ответ целыми числами (например, −5)."};
+return {valid:true,answer:task.mode==="expand"?{coef:nums[0],constant:nums[1]}:nums[0]};
+}
+function sameAnswer(given){
+if(format==="sign")return given===answerSign(task);
+if(task.mode==="expand")return given.coef===task.answer.coef&&given.constant===task.answer.constant;
+return given===task.answer;
+}
+function record(kind){
+const b=scoreBucket(stats.byMode,task.mode);
+const p=scoreBucket(stats.byPattern,task.mode+":"+task.pattern);
+if(kind==="correct"){stats.correct++;stats.streak++;b.correct++;p.correct++;}
+else{stats.wrong++;stats.streak=0;b.wrong++;p.wrong++;}
+save();drawStats();
+}
+function countedCompletion(correctOnFirstTry){
+if(!speed||!speed.active)return;
+speed.completed++;if(correctOnFirstTry)speed.correct++;else speed.incorrect++;
+updateSpeed();
+if(speed.completed>=20)finishSpeed();
+}
+function verify(event){
+if(event)event.preventDefault();
+if(!task||solved)return;
+const supplied=suppliedAnswer();
+if(!supplied.valid){setStatus(supplied.problem,"bad");return;}
+if(sameAnswer(supplied.answer)){
+record("correct");
+solved=true;$("check").disabled=true;
+setStatus(hadError?"Правильно! Исправил ошибку — разбери решение при желании.":"Верно! Следующий пример готов.","good");
+countedCompletion(!hadError);
+}else{
+record("wrong");hadError=true;
+setStatus("Пока неверно. Попробуй ещё раз или посмотри решение.","bad");
+}
+}
+function reveal(){
+if(!task)return;
+$("steps").replaceChildren();
+task.steps.forEach(step=>{const li=document.createElement("li");li.textContent=step;$("steps").appendChild(li)});
+$("final").textContent=task.mode==="expand"?"Ответ: "+display(task.answer.coef)+"x "+(task.answer.constant<0?"− ":"+ ")+Math.abs(task.answer.constant):"Ответ: "+display(task.answer)+".";
+$("solution").hidden=false;
+if(!solved){
+if(!hadError)record("wrong");
+solved=true;$("check").disabled=true;
+setStatus("Решение показано. Переходи к следующей задаче.","bad");
+countedCompletion(false);
+}
+$("show").disabled=true;
+}
+function elapsedSeconds(){if(!speed)return 0;return Math.floor(((speed.active?Date.now():speed.end)-speed.start)/1000)}
+function padTime(t){return String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0")}
+function updateSpeed(){
+$("timer").textContent=padTime(elapsedSeconds());
+const n=speed?speed.completed:0;
+$("speedBar").style.width=(n/20*100)+"%";
+if(speed&&speed.active){
+$("speedTitle").textContent="⚡ Быстрый тест · "+(Math.min(20,n+1))+" / 20";
+$("speedDescription").textContent="Выполнено: "+n+"/20 · Верно с первой попытки: "+speed.correct+" · Ошибочные задачи: "+speed.incorrect+".";
+$("speedButton").textContent="Остановить тест";
+}else if(speed&&speed.finished){
+$("speedTitle").textContent="⚡ Тест завершён";
+$("speedDescription").textContent="Время "+padTime(elapsedSeconds())+" · Верно с первой попытки: "+speed.correct+"/20 · С ошибками или пропущено: "+speed.incorrect+".";
+$("speedButton").textContent="Начать новый тест";
+}else{
+$("speedTitle").textContent="⚡ Быстрый тест: 20 заданий";
+$("speedDescription").textContent="Начни когда будешь готов: тест посчитает время и правильные ответы с первой попытки.";
+$("speedButton").textContent="Старт 20 задач";
+}
+}
+function finishSpeed(){
+if(!speed||!speed.active)return;
+speed.end=Date.now();speed.active=false;speed.finished=true;
+if(tick){clearInterval(tick);tick=null}
+updateSpeed();
+setStatus("Тест закончен: "+speed.correct+"/20 с первой попытки за "+padTime(elapsedSeconds())+".","good");
+}
+function stopSpeed(){
+if(!speed||!speed.active)return;
+speed.end=Date.now();speed.active=false;speed.finished=false;
+if(tick){clearInterval(tick);tick=null}
+speed=null;updateSpeed();
+}
+function newQuestion(){
+if(speed&&speed.active&&task&&!solved){
+if(!hadError)record("wrong");countedCompletion(false);
+}
+if(speed&&speed.finished){speed=null;}
+return pickNew();
+}
+function beginSpeed(){
+if(speed&&speed.active){stopSpeed();pickNew();return;}
+const s=settings();
+if(!s.operations.length){$("settingsError").textContent="Выбери хотя бы одну операцию перед тестом.";return}
+speed={active:true,finished:false,start:Date.now(),end:null,completed:0,correct:0,incorrect:0,config:{...s,operations:[...s.operations]}};
+if(tick)clearInterval(tick);
+tick=setInterval(updateSpeed,1000);
+pickNew();
+}
+$("answerForm").addEventListener("submit",verify);
+$("generate").addEventListener("click",newQuestion);
+$("next").addEventListener("click",newQuestion);
+$("show").addEventListener("click",reveal);
+$("speedButton").addEventListener("click",beginSpeed);
+$("chooseAll").addEventListener("click",()=>{document.querySelectorAll(".operation").forEach(x=>x.checked=true);$("settingsError").textContent=""});
+$("chooseArith").addEventListener("click",()=>{document.querySelectorAll(".operation").forEach(x=>x.checked=["add","sub","mul","div"].includes(x.value));$("settingsError").textContent=""});
+document.querySelectorAll("[data-sign]").forEach(b=>b.addEventListener("click",()=>{
+if(solved)return;
+selectedSign=b.dataset.sign;
+document.querySelectorAll("[data-sign]").forEach(x=>{x.classList.toggle("active",x===b);x.setAttribute("aria-pressed",x===b?"true":"false")});
+}));
+drawStats();updateSpeed();pickNew();
+})();
+</script>
+</body>
+</html>
